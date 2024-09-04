@@ -13,15 +13,32 @@ pipeline {
     stages {
         stage('Git Clone') {
             steps {
+                echo 'Git Clone'
                 git url: 'https://github.com/hsjo803/spring-petclinic.git',
                 branch: 'efficient-webjars'
             }
-        }
-        stage('Build') {
-            steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+            post {
+                success {
+                    echo 'Success git clone step'
+                }
+                failure {
+                    echo 'Fail git clone step'
             }
         }
+
+        // Maven Build    
+        stage('Maven Build') {
+            steps {
+                echo 'Maven Build'
+                sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+            }
+            post {
+                success {
+                    junit '**/target/surefile-reports/TEST-*.xml'
+                }
+            }
+        }
+            
         // Docker Images 생성
         stage('Docker Image Build') {
             steps {
