@@ -47,9 +47,6 @@ pipeline {
                 sh 'docker push hsjo803/spring-petclinic:latest'
             }
         }
-        
-
-                    
         stage('SSH publish') {
             steps {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'target', 
@@ -60,8 +57,6 @@ pipeline {
                 docker pull hsjo803/spring-petclinic:latest
                 docker run -d -p 80:8080 --name spring-petclinic hsjo803/spring-petclinic:latest
                 ''',
-                export BUILD_ID=Petclinic-Pipeline
-                nohup java -jar /home/ubuntu/deploy/spring-petclinic-2.7.3.jar >> nohup.out 2>&1 &''', 
                 execTimeout: 120000, 
                 flatten: false, 
                 makeEmptyDirs: false, 
@@ -71,7 +66,8 @@ pipeline {
                 remoteDirectorySDF: false, 
                 removePrefix: 'target', 
                 usePromotionTimestamp: false, 
-                useWorkspaceInPromotion: false, verbose: false)])
+                useWorkspaceInPromotion: false, verbose: false)])])
+                
             }
         }
     }
