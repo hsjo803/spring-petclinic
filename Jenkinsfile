@@ -39,6 +39,15 @@ pipeline {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-busanit'
             }
         }
+
+        // Docker Image Push
+        stage('Docker Image Build') {
+            steps {
+                sh 'docker push hsjo803/spring-petclinic:latest'
+            }
+        }
+        
+
                     
         stage('SSH publish') {
             steps {
