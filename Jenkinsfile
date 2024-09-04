@@ -28,6 +28,7 @@ pipeline {
                     """
                 }
             }
+        }
 
                     
         stage('SSH publish') {
