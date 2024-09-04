@@ -41,7 +41,7 @@ pipeline {
         }
 
         // Docker Image Push
-        stage('Docker Image Build') {
+        stage('Docker Image Push') {
             steps {
                 sh 'docker push hsjo803/spring-petclinic:latest'
             }
