@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Git Clone') {
             steps {
-                git url: 'https://github.com/sjh4616/spring-petclinic.git',
+                git url: 'https://github.com/hsjo803/spring-petclinic.git',
                 branch: 'efficient-webjars'
             }
         }
@@ -27,8 +27,8 @@ pipeline {
             steps {
                 dir("${env.WORKSPACE}") {
                     sh """ 
-                    docker build -t hsjo803/spring-petclinic:$BUILD_NUMBER .
-                    docker tag hsjo803/spring-petclinic:$BUILD_NUMBER hsjo803/spring-petclinic:latest
+                    docker build -t hellohsjo803/spring-petclinic:$BUILD_NUMBER .
+                    docker tag hellohsjo803/spring-petclinic:$BUILD_NUMBER hellohsjo803/spring-petclinic:latest
                     """
                 }
             }
@@ -44,7 +44,7 @@ pipeline {
         // Docker Image Push
         stage('Docker Image Push') {
             steps {
-                sh 'docker push hsjo803/spring-petclinic:latest'
+                sh 'docker push hellohsjo803/spring-petclinic:latest'
             }
         }
         stage('SSH publish') {
@@ -54,8 +54,8 @@ pipeline {
                 execCommand: '''
                 docker rm -f $(docker ps -aq)
                 docker rmi $(docker images -q)
-                docker pull hsjo803/spring-petclinic:latest
-                docker run -d -p 80:8080 --name spring-petclinic hsjo803/spring-petclinic:latest
+                docker pull hellohsjo803/spring-petclinic:latest
+                docker run -d -p 80:8080 --name spring-petclinic hellohsjo803/spring-petclinic:latest
                 ''',
                 execTimeout: 120000, 
                 flatten: false, 
