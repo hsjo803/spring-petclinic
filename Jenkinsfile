@@ -5,6 +5,9 @@ pipeline {
         maven "M3"
         jdk "JDK17"
     }
+    environment {
+        // jenkins에 등록해 놓은 docker hub credentials 이름
+        DOCKERHUB_CREDENTIALS = credentials('DockerHub')
     
     stages {
         stage('Git Clone') {
@@ -30,6 +33,12 @@ pipeline {
             }
         }
 
+        // Docker Login
+        stage('Docker Login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-busanit'
+            }
+        }
                     
         stage('SSH publish') {
             steps {
