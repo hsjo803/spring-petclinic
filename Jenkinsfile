@@ -18,6 +18,18 @@ pipeline {
                 sh 'mvn -Dmaven.test.failure.ignore=true clean package'
             }
         }
+        // Docker Images 생성
+        stage('Docker Image Build') {
+            steps {
+                dir("${env.WORKSPACE}") {
+                    sh """ 
+                    docker build -t hsjo803/spring-petclinic:$BUILD_NUMBER .
+                    docker tag hsjo803/spring-petclinic:$BUILD_NUMBER hsjo803/spring-petclinic:latest
+                    """
+                }
+            }
+
+                    
         stage('SSH publish') {
             steps {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'target', 
