@@ -54,7 +54,12 @@ pipeline {
             steps {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'target', 
                 transfers: [sshTransfer(cleanRemote: false, excludes: '', 
-                execCommand: '''fuser -k 8080/tcp
+                execCommand: '''
+                docker rm -f $(docker ps -aq)
+                docker rmi $(docker images -q)
+                docker pull hsjo803/spring-petclinic:latest
+                docker run -d -p 80:8080 --name spring-petclinic hsjo803/spring-petclinic:latest
+                ''',
                 export BUILD_ID=Petclinic-Pipeline
                 nohup java -jar /home/ubuntu/deploy/spring-petclinic-2.7.3.jar >> nohup.out 2>&1 &''', 
                 execTimeout: 120000, 
@@ -65,7 +70,6 @@ pipeline {
                 remoteDirectory: '', 
                 remoteDirectorySDF: false, 
                 removePrefix: 'target', 
-                sourceFiles: 'target/*.jar')], 
                 usePromotionTimestamp: false, 
                 useWorkspaceInPromotion: false, verbose: false)])
             }
